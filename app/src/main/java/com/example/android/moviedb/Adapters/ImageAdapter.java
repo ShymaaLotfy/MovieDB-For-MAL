@@ -46,10 +46,12 @@ public class ImageAdapter extends BaseAdapter {
             imageView = new ImageView(mContext);
             imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8, 8, 8, 8);
+
         }else {
             imageView = (ImageView) convertView;
         }
+        imageView.getLayoutParams().height +=150;
+        imageView.getLayoutParams().width+= 150;
 
         Picasso.with(mContext)
                 .load(mImagespath.get(position))
