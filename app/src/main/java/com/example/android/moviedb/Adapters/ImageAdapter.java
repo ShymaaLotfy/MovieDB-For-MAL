@@ -50,8 +50,8 @@ public class ImageAdapter extends BaseAdapter {
         }else {
             imageView = (ImageView) convertView;
         }
-        imageView.getLayoutParams().height +=150;
-        imageView.getLayoutParams().width+= 150;
+        imageView.getLayoutParams().height += 150;
+        imageView.getLayoutParams().width += 150;
 
         Picasso.with(mContext)
                 .load(mImagespath.get(position))

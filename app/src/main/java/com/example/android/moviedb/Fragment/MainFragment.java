@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
@@ -30,6 +33,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -37,17 +41,7 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        MovieDownloadTask task = new MovieDownloadTask(){
-            @Override
-            protected void onPostExecute(ArrayList<Movie> movies) {
-                super.onPostExecute(movies);
-                Toast.makeText(getContext(),"hello",Toast.LENGTH_SHORT).show();
-                for(int i=0;i<movies.size();i++){
-                    posters.add(movies.get(i).getMoviePoster());
-                    adapter.notifyDataSetChanged();
-                }
-            }
-        };task.execute(Urls.NOW_PLAYING);
+        OperateDownloadTask(Urls.NOW_PLAYING);
 
         //find the grid view and set the adapter
         GridView grid = (GridView) rootView.findViewById(R.id.grid);
@@ -63,5 +57,57 @@ public class MainFragment extends Fragment {
 //        });
 
         return rootView;
+    }
+
+    public void OperateDownloadTask(String url){
+
+        MovieDownloadTask task = new MovieDownloadTask(){
+            @Override
+            protected void onPostExecute(ArrayList<Movie> movies) {
+                super.onPostExecute(movies);
+                posters.clear();
+                for(int i=0;i<movies.size();i++){
+                    posters.add(movies.get(i).getMoviePoster());
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        };task.execute(url);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.movie_list_choice_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.top_rated) {
+            UpdateTheData("top_rated");
+            return true;
+        }
+
+        if (id == R.id.most_popular) {
+            UpdateTheData("most_popular");
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void UpdateTheData(String whichList){
+        String url = null ;
+        if(whichList == "top_rated"){
+            url = Urls.TOP_RATED;
+        }else if (whichList == "most_popular"){
+            url = Urls.MOST_POPULAR;
+        }
+
+        OperateDownloadTask(url);
     }
 }

@@ -8,4 +8,6 @@ public class Urls {
     public static final String BASE_URL = "http://api.themoviedb.org/3/";
     public static final String IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
     public static final String NOW_PLAYING = BASE_URL + "movie/now_playing?api_key=" + API_KEY ;
+    public static final String TOP_RATED = BASE_URL + "movie/top_rated?api_key=" + API_KEY ;
+    public static final String MOST_POPULAR = BASE_URL + "movie/popular?api_key=" + API_KEY ;
 }
