@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GridView
     android:id="@+id/grid"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:columnWidth="90dp"
-    android:numColumns="3"
-    android:verticalSpacing="60dip"
-    android:horizontalSpacing="10dip"
-    android:stretchMode="columnWidth"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:numColumns="2"
+    android:verticalSpacing="0dp"
+    android:horizontalSpacing="0dp"
+    android:background="@color/colorAccent"
+    android:columnWidth="500dp"
     android:gravity="center"
     xmlns:android="http://schemas.android.com/apk/res/android" />
+
+
+
+

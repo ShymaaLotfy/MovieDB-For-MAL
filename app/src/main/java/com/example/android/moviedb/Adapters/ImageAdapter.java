@@ -7,6 +7,8 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.example.android.moviedb.Models.Movie;
+import com.example.android.moviedb.Network.Urls;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -17,21 +19,27 @@ import java.util.ArrayList;
 public class ImageAdapter extends BaseAdapter {
 
     private Context mContext;
-    private ArrayList<String> mImagespath = new ArrayList();
+    private ArrayList<Movie> mMoviesList = new ArrayList();
 
-    public ImageAdapter(Context c , ArrayList<String> imagesPath) {
+    public ImageAdapter(Context c , ArrayList<Movie> movies) {
         mContext = c;
-        mImagespath = imagesPath;
+        mMoviesList = movies;
+    }
+
+    public void addAll(ArrayList<Movie> movies){
+        mMoviesList.clear();
+        mMoviesList.addAll( movies);
+        notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return mImagespath.size();
+        return mMoviesList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return mImagespath.get(position);
+        return mMoviesList.get(position);
     }
 
     @Override
@@ -44,17 +52,15 @@ public class ImageAdapter extends BaseAdapter {
         ImageView imageView;
         if(convertView == null){
             imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
+            imageView.setLayoutParams(new GridView.LayoutParams(400, 600));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         }else {
             imageView = (ImageView) convertView;
         }
-        imageView.getLayoutParams().height += 150;
-        imageView.getLayoutParams().width += 150;
 
         Picasso.with(mContext)
-                .load(mImagespath.get(position))
+                .load(Urls.IMAGE_BASE_URL + mMoviesList.get(position).getMoviePoster())
                 .into(imageView);
 
         return imageView;

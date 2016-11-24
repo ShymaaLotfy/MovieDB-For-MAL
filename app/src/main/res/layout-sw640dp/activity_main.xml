@@ -1,0 +1,23 @@
+<LinearLayout android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="#000000"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <FrameLayout android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="0.3"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/mainContainer"
+        tools:context=".Activities.MainActivity"
+        tools:ignore="MergeRootFrame"
+        xmlns:android="http://schemas.android.com/apk/res/android" />
+    <FrameLayout android:layout_width="0dp"
+        android:layout_weight="0.7"
+        android:layout_height="match_parent"
+        android:id="@+id/detailsContainer"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+    </FrameLayout>
+
+
+
+</LinearLayout>

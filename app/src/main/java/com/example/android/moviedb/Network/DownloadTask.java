@@ -2,9 +2,10 @@ package com.example.android.moviedb.Network;
 
 import android.os.AsyncTask;
 
-import com.example.android.moviedb.Models.Movie;
+import com.example.android.moviedb.Interfaces.DataIsReady;
+import com.example.android.moviedb.Models.Model;
+import com.example.android.moviedb.Parser.Parser;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,12 +20,15 @@ import java.util.ArrayList;
 /**
  * Created by Shimaa on 10/17/2016.
  */
-public abstract class DownloadTask<V> extends AsyncTask<String,Void,ArrayList<V>> {
+public class DownloadTask extends AsyncTask<String,Void,ArrayList<? extends Model>> {
+
+    public DataIsReady dataIsReady = null;
+    public Parser parser ;
 
     @Override
-    protected ArrayList<V> doInBackground(String... params) {
+    protected ArrayList<? extends Model> doInBackground(String... params) {
 
-        ArrayList<V> result = new ArrayList<>();
+        ArrayList<Model> result = new ArrayList<>();
         //check if i have a null url
         if(params[0] == null) return null;
 
@@ -36,14 +40,9 @@ public abstract class DownloadTask<V> extends AsyncTask<String,Void,ArrayList<V>
             if(connection.getResponseCode() == HttpURLConnection.HTTP_OK){
                 String jsonString = readResponse(connection.getInputStream());
                 JSONObject jsonObject = new JSONObject(jsonString);
-                JSONArray resultArray = jsonObject.getJSONArray("results");
-                for(int i=0 ; i<resultArray.length() ; i++){
-                    JSONObject object = resultArray.getJSONObject(i);
-                    result.add((V) GetElementFromJson(object));
-                }
+                result = parser.parse(jsonObject);
                 return result;
             }
-
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -51,10 +50,8 @@ public abstract class DownloadTask<V> extends AsyncTask<String,Void,ArrayList<V>
             e.printStackTrace();
         }
 
-        return null;
+        return result;
     }
-
-    abstract protected V GetElementFromJson(JSONObject object) throws JSONException;
 
     private String readResponse(InputStream inputStream) throws IOException {
 
@@ -69,5 +66,11 @@ public abstract class DownloadTask<V> extends AsyncTask<String,Void,ArrayList<V>
         }
 
         return builder.toString();
+    }
+
+    @Override
+    protected void onPostExecute(ArrayList<? extends Model> result) {
+        super.onPostExecute( result );
+        dataIsReady.Display( result);
     }
 }
